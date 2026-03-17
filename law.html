@@ -777,8 +777,8 @@
         <td>
           <button class="filter-btn" style="font-size:11px;padding:3px 10px;"
             data-type="site"
-            data-key="${escHtml(r.engTitle)}"
-            data-label="${escHtml(r.workTitle)}"
+            data-key="${encodeURIComponent(r.siteName)}"
+            data-label="${encodeURIComponent(r.siteName)}"
             onclick="handleLogBtn(this)">로그</button>
         </td>
       </tr>
@@ -963,6 +963,13 @@
 
     document.getElementById('log-modal').classList.add('open');
   }
+
+  function handleLogBtn(btn) {
+  const type = btn.dataset.type;
+  const key = decodeURIComponent(btn.dataset.key || '');
+  const label = decodeURIComponent(btn.dataset.label || '');
+  openLogModal(type, key, label);
+}
 
   function renderDailyChart(logs) {
     // 날짜별 활성 건수 집계 (최근 14일)
