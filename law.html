@@ -57,7 +57,7 @@
   .wrapper {
     position: relative;
     z-index: 1;
-    max-width: 1300px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 32px 24px;
   }
@@ -80,6 +80,13 @@
 
   .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
   .nav-link {
     display: flex; align-items: center; gap: 6px;
     padding: 6px 14px;
@@ -87,13 +94,7 @@
     color: var(--text-dim); font-size: 12px; text-decoration: none; transition: all 0.15s;
   }
   .nav-link:hover { border-color: var(--accent); color: var(--accent); }
-
-  .status-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--green); box-shadow: 0 0 8px var(--green);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .nav-current { border-color: var(--accent) !important; color: var(--accent) !important; background: var(--accent-dim) !important; pointer-events: none; }
 
   .refresh-btn {
     display: flex; align-items: center; gap: 6px;
@@ -249,12 +250,24 @@
   }
   .site-status-select.s- { background-color: var(--surface2); border-color: var(--border2); color: var(--text-dim); }
   .site-status-select.s-제외 { background-color: var(--red-dim); border-color: var(--red); color: var(--red); }
+  .site-status-select.s-플랫폼 { background-color: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+  .site-status-select.s-침해 { background-color: var(--orange-dim); border-color: var(--orange); color: var(--orange); }
   .site-status-select option { background: var(--surface2); color: var(--text); }
 
   /* 로딩/빈 상태 */
   .loading-row td, .empty-row td {
     text-align: center; padding: 60px; color: var(--text-dim); font-size: 13px;
   }
+
+  .btn-delete-log {
+    width: 28px; height: 28px; border-radius: 5px;
+    border: 1px solid var(--border2); background: transparent;
+    color: var(--text-muted); cursor: pointer; display: flex;
+    align-items: center; justify-content: center; transition: all 0.15s;
+    opacity: 0;
+  }
+  tr:hover .btn-delete-log { opacity: 1; }
+  .btn-delete-log:hover { border-color: var(--red); color: var(--red); }
   .spinner {
     display: inline-block; width: 16px; height: 16px;
     border: 2px solid var(--border2); border-top-color: var(--accent);
@@ -272,7 +285,7 @@
 
   .modal {
     background: var(--surface); border: 1px solid var(--border2); border-radius: 12px;
-    width: 760px; max-width: 94vw; max-height: 82vh;
+    width: 1000px; max-width: 96vw; max-height: 86vh;
     display: flex; flex-direction: column; animation: modalIn 0.2s ease;
   }
   @keyframes modalIn {
@@ -350,7 +363,7 @@
       <h1><span>//</span> 검색 모니터링</h1>
       <p id="last-updated">마지막 업데이트: —</p>
     </div>
-    <div class="header-right">
+            <div class="header-right">
       <a class="nav-link" href="index.html">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         크롤링 모니터링
@@ -362,6 +375,10 @@
       <a class="nav-link" href="works.html">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
         작품 목록
+      </a>
+      <a class="nav-link nav-current" href="law.html">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        검색 모니터링
       </a>
       <div class="status-dot"></div>
       <button class="refresh-btn" id="refresh-btn" onclick="loadData()">
@@ -485,6 +502,7 @@
             <th onclick="sortAll('firstFound', this)">최초 발견일 <span class="si">↕</span></th>
             <th onclick="sortAll('searchDate', this)">마지막 확인일 <span class="si">↕</span></th>
             <th>상태</th>
+            <th style="cursor:default;width:40px;"></th>
           </tr>
         </thead>
         <tbody id="tbody-all">
@@ -516,6 +534,7 @@
             <th>최초 발견</th>
             <th>마지막 확인</th>
             <th>상태</th>
+            <th style="cursor:default;width:40px;"></th>
           </tr>
         </thead>
         <tbody id="modal-log-body"></tbody>
@@ -664,7 +683,11 @@
         <td>${r.deleted > 0 ? `<span class="tag-deleted">${r.deleted}</span>` : `<span style="color:var(--text-muted)">0</span>`}</td>
         <td class="date-text">${r.lastDate}</td>
         <td>
-          <button class="filter-btn" style="font-size:11px;padding:3px 10px;" onclick="openLogModal('work', '${escHtml(r.engTitle)}', '${escHtml(r.workTitle)}')">로그</button>
+          <button class="filter-btn" style="font-size:11px;padding:3px 10px;"
+            data-type="work"
+            data-key="${escAttr(r.engTitle)}"
+            data-label="${escAttr(r.workTitle)}"
+            onclick="handleLogBtn(this)">로그</button>
         </td>
       </tr>
     `).join('');
@@ -746,11 +769,17 @@
         <td>
           <select class="site-status-select s-${escHtml(r.status)}" onchange="updateSiteStatus('${escHtml(r.siteName)}', this)">
             <option value="" ${!r.status ? 'selected' : ''}>— 없음</option>
+            <option value="플랫폼" ${r.status === '플랫폼' ? 'selected' : ''}>플랫폼</option>
+            <option value="침해" ${r.status === '침해' ? 'selected' : ''}>침해</option>
             <option value="제외" ${r.status === '제외' ? 'selected' : ''}>제외</option>
           </select>
         </td>
         <td>
-          <button class="filter-btn" style="font-size:11px;padding:3px 10px;" onclick="openLogModal('site', '${escHtml(r.siteName)}', '${escHtml(r.siteName)}')">로그</button>
+          <button class="filter-btn" style="font-size:11px;padding:3px 10px;"
+            data-type="site"
+            data-key="${escAttr(r.siteName)}"
+            data-label="${escAttr(r.siteName)}"
+            onclick="handleLogBtn(this)">로그</button>
         </td>
       </tr>
     `).join('');
@@ -822,7 +851,7 @@
 
     const tbody = document.getElementById('tbody-all');
     if (!rows.length) {
-      tbody.innerHTML = `<tr class="empty-row"><td colspan="6">데이터가 없습니다.</td></tr>`;
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="7">데이터가 없습니다.</td></tr>`;
       return;
     }
 
@@ -841,14 +870,60 @@
         <td class="date-text">${d.firstFound}</td>
         <td class="date-text">${d.searchDate}</td>
         <td>${d.deleted === 'Y' ? `<span class="tag-deleted">삭제</span>` : `<span class="tag-active">활성</span>`}</td>
+        <td>
+          <button class="btn-delete-log" onclick="deleteLog('${escHtml(d.url)}', 'all')" title="삭제">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </td>
       </tr>
     `).join('');
+  }
+
+  // ========================
+  // 로그 삭제
+  // ========================
+  let currentModalType = '';
+  let currentModalKey = '';
+  let currentModalLabel = '';
+
+  async function deleteLog(url, source) {
+    if (!confirm('이 로그를 삭제할까요?')) return;
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'deleteLog', url })
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || '삭제 실패');
+
+      // 로컬 데이터에서 제거
+      const idx = allData.findIndex(d => d.url === url);
+      if (idx !== -1) allData.splice(idx, 1);
+
+      updateStats();
+      renderWorksTable();
+      renderSitesTable();
+      renderAllTable();
+
+      // 모달 내에서 삭제한 경우 모달 새로고침
+      if (source === 'modal') {
+        openLogModal(currentModalType, currentModalKey, currentModalLabel);
+      }
+
+      showToast('삭제 완료', 'success');
+    } catch (e) {
+      showToast('삭제 실패: ' + e.message, 'error');
+    }
   }
 
   // ========================
   // 로그 모달
   // ========================
   function openLogModal(type, key, label) {
+    currentModalType = type;
+    currentModalKey = key;
+    currentModalLabel = label;
+
     let logs = type === 'work'
       ? allData.filter(d => d.engTitle === key)
       : allData.filter(d => d.siteName === key);
@@ -872,6 +947,11 @@
         <td class="date-text">${d.firstFound}</td>
         <td class="date-text">${d.searchDate}</td>
         <td>${d.deleted === 'Y' ? `<span class="tag-deleted">삭제</span>` : `<span class="tag-active">활성</span>`}</td>
+        <td>
+          <button class="btn-delete-log" onclick="deleteLog('${escHtml(d.url)}', 'modal')" title="삭제">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </td>
       </tr>
     `).join('');
 

@@ -115,6 +115,16 @@
     50% { opacity: 0.3; }
   }
 
+  .nav-link {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    background: var(--surface2); border: 1px solid var(--border2); border-radius: 6px;
+    color: var(--text-dim); font-size: 12px; text-decoration: none; transition: all 0.15s;
+  }
+  .nav-link:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-current { border-color: var(--accent) !important; color: var(--accent) !important; background: var(--accent-dim) !important; pointer-events: none; }
+  .nav-current { border-color: var(--accent) !important; color: var(--accent) !important; background: var(--accent-dim) !important; pointer-events: none; }
+
   .refresh-btn {
     display: flex;
     align-items: center;
@@ -564,18 +574,23 @@
       <p id="last-updated">마지막 업데이트: —</p>
     </div>
     <div class="header-right">
-      <a href="piracy.html" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text-dim);font-size:12px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text-dim)'">
+      <a class="nav-link nav-current" href="index.html">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        크롤링 모니터링
+      </a>
+      <a class="nav-link" href="piracy.html">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         유포 통계
       </a>
-      <a href="works.html" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text-dim);font-size:12px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text-dim)'">
+      <a class="nav-link" href="works.html">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
         작품 목록
       </a>
-      <a href="law.html" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text-dim);font-size:12px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text-dim)'">
+      <a class="nav-link" href="law.html">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         검색 모니터링
       </a>
+      <div class="status-dot"></div>
       <button class="refresh-btn" id="refresh-btn" onclick="loadData()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
         새로고침
