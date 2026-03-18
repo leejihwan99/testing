@@ -1,0 +1,292 @@
+/* 검색 모니터링 전용 스타일 */
+
+.stats-row { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 900px) { .stats-row { grid-template-columns: repeat(3, 1fr); } }
+
+/* 통계 카드 색상 */
+.stat-card.s-total::before { background: var(--accent); }
+.stat-card.s-active::before { background: var(--green); }
+.stat-card.s-deleted::before { background: var(--red); }
+.stat-card.s-sites::before { background: var(--orange); }
+.stat-card.s-excluded::before { background: var(--text-muted); }
+
+/* 전체 삭제량 그래프 */
+.deletion-chart-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.deletion-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.deletion-chart-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.deletion-chart-range {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.deletion-chart-wrap {
+  position: relative;
+  height: 140px;
+  width: 100%;
+}
+
+.deletion-chart-wrap canvas {
+  display: block;
+}
+
+.deletion-chart-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* 탭 */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border2);
+}
+
+.tab-btn {
+  padding: 9px 20px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: -1px;
+}
+
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* 섹션 컨테이너 */
+.section-wrap { display: none; }
+.section-wrap.active { display: block; }
+
+/* 결과 표시 */
+.result-title { font-weight: 500; color: var(--text); margin-bottom: 3px; }
+
+.result-url {
+  color: var(--accent);
+  font-size: 12px;
+  text-decoration: none;
+  display: block;
+  max-width: 340px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-url:hover { text-decoration: underline; }
+
+.snippet-text {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 340px;
+  line-height: 1.5;
+}
+
+/* 사이트 상태 드롭박스 */
+.site-status-select {
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  font-family: var(--sans);
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a97b0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 26px;
+  transition: all 0.15s;
+  min-width: 80px;
+}
+
+.site-status-select.s- { background-color: var(--surface2); border-color: var(--border2); color: var(--text-dim); }
+.site-status-select.s-신규 { background-color: var(--surface2); border-color: var(--border2); color: var(--text-dim); }
+.site-status-select.s-플랫폼 { background-color: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+.site-status-select.s-침해 { background-color: var(--orange-dim); border-color: var(--orange); color: var(--orange); }
+.site-status-select.s-제외 { background-color: var(--red-dim); border-color: var(--red); color: var(--red); }
+.site-status-select option { background: var(--surface2); color: var(--text); }
+
+/* 로그 삭제 버튼 */
+.btn-delete-log {
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  opacity: 0;
+}
+
+tr:hover .btn-delete-log { opacity: 1; }
+.btn-delete-log:hover { border-color: var(--red); color: var(--red); }
+
+/* 로그 모달 */
+.modal { width: 1000px; }
+
+.daily-chart {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.daily-chart-title {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.daily-chart-canvas-wrap {
+  position: relative;
+  height: 90px;
+  width: 100%;
+}
+
+.daily-chart-canvas-wrap canvas {
+  display: block;
+}
+
+.daily-chart-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* 모달 작품명 링크 */
+.modal-work-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.modal-work-link:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+/* 모달 로그 탭 */
+.modal-log-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  flex-shrink: 0;
+}
+
+.modal-tab {
+  padding: 4px 14px;
+  border-radius: 5px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--sans);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.modal-tab:hover { border-color: var(--text-dim); color: var(--text); }
+.modal-tab.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+.modal-tab-date-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.modal-date-nav {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  line-height: 1;
+}
+
+.modal-date-nav:hover { border-color: var(--accent); color: var(--accent); }
+.modal-date-nav:disabled { opacity: 0.3; cursor: default; }
+
+.modal-date-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 120px;
+  text-align: center;
+}
+
+/* 모달 로그 테이블 */
+.modal-log-table { width: 100%; border-collapse: collapse; }
+.modal-log-table thead { position: sticky; top: 0; background: var(--surface2); }
+.modal-log-table th {
+  padding: 9px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.modal-log-table td {
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  vertical-align: middle;
+}
+.modal-log-table tr:last-child td { border-bottom: none; }
+.modal-log-table tbody tr:hover { background: var(--surface2); }

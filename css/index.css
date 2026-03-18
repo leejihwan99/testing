@@ -1,0 +1,162 @@
+/* 크롤링 모니터링 전용 스타일 */
+
+.stats-row { grid-template-columns: repeat(6, 1fr); }
+@media (max-width: 900px) { .stats-row { grid-template-columns: repeat(3, 1fr); } }
+
+/* 통계 카드 색상 */
+.stat-card.total::before { background: var(--accent); }
+.stat-card.unset::before { background: var(--text-muted); }
+.stat-card.exception::before { background: var(--green); }
+.stat-card.monitoring::before { background: var(--blue); }
+.stat-card.crawling::before { background: var(--orange); }
+.stat-card.blocked::before { background: var(--red); }
+
+/* 필터 행 */
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+/* 필터 행 내 검색창 */
+.filter-row .search-input {
+  margin-left: auto;
+  width: 220px;
+  padding: 5px 12px;
+}
+
+/* 필터 라벨 */
+.filter-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-right: 4px;
+}
+
+/* 테이블 */
+.member-id {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.member-id:hover { color: #93c5fd; text-decoration: underline; }
+
+.num {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.blocked-date {
+  font-size: 13px;
+  color: var(--red);
+}
+
+/* 상태 드롭박스 */
+.status-select {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  font-family: var(--sans);
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a97b0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 26px;
+  transition: all 0.15s;
+  min-width: 95px;
+}
+
+.status-select.s-예외 { background-color: var(--green-dim); border-color: var(--green); color: var(--green); }
+.status-select.s-모니터링 { background-color: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+.status-select.s-크롤링 { background-color: var(--orange-dim); border-color: var(--orange); color: var(--orange); }
+.status-select.s-차단 { background-color: var(--red-dim); border-color: var(--red); color: var(--red); }
+.status-select.s- { background-color: var(--surface2); border-color: var(--border2); color: var(--text-dim); }
+.status-select option { background: var(--surface2); color: var(--text); }
+
+/* 메모 */
+.memo-cell { display: flex; align-items: center; gap: 6px; }
+
+.memo-text {
+  font-size: 13px;
+  color: var(--text-dim);
+  font-style: italic;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.memo-btn {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  opacity: 0;
+}
+
+tr:hover .memo-btn { opacity: 1; }
+.memo-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* 검색 인풋 (툴바 우측) */
+.search-input-right {
+  margin-left: auto;
+  padding: 7px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13px;
+  outline: none;
+  width: 220px;
+  transition: border-color 0.15s;
+}
+
+.search-input-right::placeholder { color: var(--text-muted); }
+.search-input-right:focus { border-color: var(--accent); }
+
+/* 로그 모달 */
+.log-table { width: 100%; border-collapse: collapse; }
+.log-table thead { position: sticky; top: 0; background: var(--surface2); }
+.log-table th {
+  padding: 10px 24px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  cursor: default;
+}
+.log-table td {
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  vertical-align: middle;
+}
+.log-table tr:last-child td { border-bottom: none; }
+.log-table tbody tr:hover { background: var(--surface2); }
+
+/* 메모 모달 */
+.memo-modal { width: 400px; }
