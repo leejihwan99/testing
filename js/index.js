@@ -9,7 +9,7 @@ async function loadData() {
   try {
     // raw_data와 members 병렬 로드
     const [rawRows, memberRows] = await Promise.all([
-      sbGet('raw_data', '?select=member_id,views,date'),
+      sbGet('raw_data', '?select=member_id,views,date&order=date.desc'),
       sbGet('members', '?select=*')
     ]);
 
@@ -26,7 +26,10 @@ async function loadData() {
       if (!stats[id]) stats[id] = { totalViews: 0, count: 0, lastDate: '' };
       stats[id].totalViews += Number(r.views);
       stats[id].count += 1;
-      if (!stats[id].lastDate || r.date > stats[id].lastDate) stats[id].lastDate = r.date;
+      const rDate = r.date ? String(r.date).slice(0, 10) : '';
+      if (rDate && (!stats[id].lastDate || rDate > stats[id].lastDate)) {
+        stats[id].lastDate = rDate;
+      }
     }
 
     allData = Object.entries(stats).map(([id, s]) => ({
