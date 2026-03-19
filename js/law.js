@@ -17,16 +17,38 @@ let allData = [];
     const btn = document.getElementById('refresh-btn');
     btn.classList.add('loading');
     try {
-      const [dataRes, sitesRes, worksRes] = await Promise.all([
-        fetch(`${API_URL}?action=getLawData`),
-        fetch(`${API_URL}?action=getSites`),
-        fetch(`${API_URL}?action=getWorks`)
+      const [rawData, sitesData, worksData] = await Promise.all([
+        sbGet('RAW_DATA', '?select=*'),
+        sbGet('sites', '?select=*'),
+        sbGet('works', '?select=*')
       ]);
-      allData = await dataRes.json();
-      allSites = await sitesRes.json();
-      allWorks = await worksRes.json();
 
-      if (allData.error) throw new Error(allData.error);
+      allData = rawData.map(r => ({
+        searchDate: r.search_date || '',
+        workTitle: r.work_title || '',
+        engTitle: r.eng_title || '',
+        resultTitle: r.result_title || '',
+        url: r.url || '',
+        siteName: r.site_name || '',
+        snippet: r.snippet || '',
+        firstFound: r.first_found || '',
+        deleted: r.deleted || '',
+        deletedDate: r.deleted_date || '',
+      }));
+
+      allSites = sitesData.map(r => ({
+        siteName: r.site_name || '',
+        status: r.status || '',
+        regDate: r.reg_date || '',
+      }));
+
+      allWorks = worksData.map(r => ({
+        id: r.id,
+        title: r.title || '',
+        engTitle: r.eng_title || '',
+        url: r.url || '',
+        author: r.author || '',
+      }));
 
       updateStats();
       renderMainDeletionChart();
@@ -251,12 +273,7 @@ let allData = [];
     const newStatus = selectEl.value;
     selectEl.disabled = true;
     try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'updateSiteStatus', site: siteName, status: newStatus })
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error();
+      await sbPatch('sites', `site_name=eq.${encodeURIComponent(siteName)}`, { status: newStatus });
       const site = allSites.find(s => s.siteName === siteName);
       if (site) site.status = newStatus;
       selectEl.className = `site-status-select s-${newStatus}`;
@@ -467,12 +484,7 @@ let allData = [];
   async function deleteLog(url, source) {
     if (!confirm('이 로그를 삭제할까요?')) return;
     try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'deleteLog', url })
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.error || '삭제 실패');
+      await sbDelete('RAW_DATA', `url=eq.${encodeURIComponent(url)}`);
 
       // 로컬 데이터에서 제거
       const idx = allData.findIndex(d => d.url === url);
