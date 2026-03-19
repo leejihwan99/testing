@@ -18,7 +18,7 @@ let allData = [];
     btn.classList.add('loading');
     try {
       const [rawData, sitesData, worksData] = await Promise.all([
-        sbGet('RAW_DATA', '?select=*'),
+        sbGet('law_data', '?select=*'),
         sbGet('sites', '?select=*'),
         sbGet('works', '?select=*')
       ]);
@@ -484,7 +484,7 @@ let allData = [];
   async function deleteLog(url, source) {
     if (!confirm('이 로그를 삭제할까요?')) return;
     try {
-      await sbDelete('RAW_DATA', `url=eq.${encodeURIComponent(url)}`);
+      await sbDelete('law_data', `url=eq.${encodeURIComponent(url)}`);
 
       // 로컬 데이터에서 제거
       const idx = allData.findIndex(d => d.url === url);
